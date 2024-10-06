@@ -19,7 +19,7 @@ pipeline {
                     sh '''
                         if ! command -v go &> /dev/null; then
                             echo "Go not found, installing..."
-                            curl -LO https://golang.org/dl/go1.20.linux-amd64.tar.gz
+                            curl -LO https://golang.org/dl/go1.22.linux-amd64.tar.gz
                             sudo tar -C /usr/local -xzf go1.20.linux-amd64.tar.gz
                             echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.bashrc
                             source ~/.bashrc
@@ -36,7 +36,6 @@ pipeline {
                     // List files for debugging purposes
                     sh 'ls -ltr'
                     // Download Go modules and build the project
-                    sh 'go mod download'
                     sh 'go build -o main ./...' // Build the Go application
                     // Run tests if applicable
                     sh 'go test ./...' // Run Go tests
