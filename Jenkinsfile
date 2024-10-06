@@ -17,19 +17,9 @@ pipeline {
         sh 'go build -o main'
       }
     }
-    stage('Static Code Analysis') {
-      environment {
-        SONAR_URL = "http://44.222.203.42:9000"
-      }
-      steps {
-        withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
-          sh 'mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
-        }
-      }
-    }
     stage('Build and Push Docker Image') {
       environment {
-        DOCKER_IMAGE = "vijayarajult2/go0web-app:${BUILD_NUMBER}"
+        DOCKER_IMAGE = "vijayarajult2/go-web-app:${BUILD_NUMBER}"
         // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-ap/Dockerfile"
         REGISTRY_CREDENTIALS = credentials('docker-cred')
       }
