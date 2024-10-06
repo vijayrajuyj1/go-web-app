@@ -52,7 +52,7 @@ pipeline {
               git config user.name "vijayrajuyj1"
                BUILD_NUMBER=${BUILD_NUMBER}
               # Update the image tag in values.yaml
-              sed -i 's/tag: .*/tag: "${{ BUILD_NUMBER }}"/' helm/helm1/values.yaml
+              sed -i 's/tag: .*/tag/${{BUILD_NUMBER}}/' helm/helm1/values.yaml
               git add helm/helm1/values.yaml
               git commit -m "Update image tag in values.yaml to version ${BUILD_NUMBER}"
               git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
