@@ -46,7 +46,6 @@ pipeline {
                         // Run SonarQube analysis
                         sh '''
                             sonar-scanner \
-                            -Dsonar.projectKey=go-web-app \
                             -Dsonar.sources=. \
                             -Dsonar.host.url=${SONAR_URL} \
                             -Dsonar.login=$SONAR_AUTH_TOKEN
