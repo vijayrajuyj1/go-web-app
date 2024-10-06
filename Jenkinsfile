@@ -33,9 +33,9 @@ pipeline {
         }
       }
     }
-    stage('Update Deployment File') {
+    stage('Update Values.yaml File') {
         environment {
-            GIT_REPO_NAME = "pet-clinic-01"
+            GIT_REPO_NAME = "go-web-app"
             GIT_USER_NAME = "vijayrajuyj1"
         }
         steps {
@@ -44,8 +44,8 @@ pipeline {
                     git config user.email "vijayarajuyj1@gmail.com"
                     git config user.name "vijayrajuyj1"
                     BUILD_NUMBER=${BUILD_NUMBER}
-                    sed -i "s/{{ .Values.image.tag }}/${BUILD_NUMBER}/g" k8s/deployment.yml
-                    git add k8s/deployment.yml
+                    sed -i "s/{{ .Values.image.tag }}/${BUILD_NUMBER}/g" helm/helm1/values.yaml
+                    git add helm/helm1/values..yaml
                     git commit -m "Update deployment image to version ${BUILD_NUMBER}"
                     git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                 '''
