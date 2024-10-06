@@ -52,7 +52,7 @@ pipeline {
               git config user.name "vijayrajuyj1"
               BUILD_NUMBER=${BUILD_NUMBER}
               # Update the image tag in values.yaml
-              sed -i 's/tag: .*/tag: '"${BUILD_NUMBER}"'/' helm/helm1/values.yaml
+              sed -i 's/tag: .*/tag: '"${BUILD_NUMBER}"'/g' helm/helm1/values.yaml
               # Check git status to see if the file was modified
               git status
               git add helm/helm1/values.yaml
