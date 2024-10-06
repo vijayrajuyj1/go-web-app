@@ -15,8 +15,8 @@ pipeline {
     stage('Build and Test') {
       steps {
         sh 'ls -ltr'
-        // Update and install Go
-        sh 'sudo apt update && sudo apt install -y golang-go'
+        // Install Go
+        sh 'sudo apt install -y golang-go'
         // Build the Go project
         sh 'go build -o main'
       }
@@ -53,8 +53,12 @@ pipeline {
               BUILD_NUMBER=${BUILD_NUMBER}
               # Update the image tag in values.yaml
               sed -i 's/tag: .*/tag: '"${BUILD_NUMBER}"'/' helm/helm1/values.yaml
+              
+              # Check git status to see if the file was modified
+              git status
+              
               git add helm/helm1/values.yaml
-              git commit -m "Update image tag in values.yaml to version ${BUILD_NUMBER}"
+              git commit -m "Update image tag in values.yaml to version ${BUILD_NUMBER}" || echo "No changes to commit"
               git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
           '''
         }
@@ -62,5 +66,3 @@ pipeline {
     }
   }
 }
-
-
