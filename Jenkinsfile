@@ -8,7 +8,7 @@ pipeline {
                 script {
                     // Checkout the code from Git
                     sh 'echo passed'
-                    git branch: 'main', url: 'http://github.com/iam-veeramalla/Jenkins-Zero-To-Hero.git'
+              //      git branch: 'main', url: 'http://github.com/iam-veeramalla/Jenkins-Zero-To-Hero.git'
                 }
             }
         }
