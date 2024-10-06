@@ -16,17 +16,8 @@ pipeline {
             steps {
                 script {
                     // Install Go if it's not already installed
-                    sh '''
-                        if ! command -v go &> /dev/null; then
-                            echo "Go not found, installing..."
-                            curl -LO https://golang.org/dl/go1.22.linux-amd64.tar.gz
-                            sudo tar -C /usr/local -xzf go1.20.linux-amd64.tar.gz
-                            echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.bashrc
-                            source ~/.bashrc
-                        else
-                            echo "Go is already installed"
-                        fi
-                    '''
+                    sh 'sudo apt update'
+                    sh 'sudo apt install -y golang-go'
                 }
             }
         }
