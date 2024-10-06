@@ -41,7 +41,7 @@ pipeline {
                 script {
                     withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
                         // Run SonarQube analysis (ensure you have the correct setup for Go)
-                        sh ' go run sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+                        sh ' go run sonar:scanner -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
                     }
                 }
             }
