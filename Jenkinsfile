@@ -7,8 +7,9 @@ pipeline {
             steps {
                 script {
                     // Checkout the code from Git
-                    sh 'echo passed'
-              //      git branch: 'main', url: 'http://github.com/iam-veeramalla/Jenkins-Zero-To-Hero.git'
+                    sh 'echo Checkout started'
+                    // Uncomment the line below to enable checkout
+                    // git branch: 'main', url: 'http://github.com/iam-veeramalla/Jenkins-Zero-To-Hero.git'
                 }
             }
         }
@@ -26,6 +27,8 @@ pipeline {
                 script {
                     // List files for debugging purposes
                     sh 'ls -ltr'
+                    // Set Go modules path to ensure they are installed correctly
+                    sh 'go mod tidy'  // Ensure Go modules are tidy
                     // Download Go modules and build the project
                     sh 'go build -o main ./...' // Build the Go application
                     // Run tests if applicable
@@ -40,8 +43,14 @@ pipeline {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
-                        // Run SonarQube analysis (ensure you have the correct setup for Go)
-                        sh 'sonar-scanner -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+                        // Run SonarQube analysis
+                        sh '''
+                            sonar-scanner \
+                            -Dsonar.projectKey=go-web-app \
+                            -Dsonar.sources=. \
+                            -Dsonar.host.url=${SONAR_URL} \
+                            -Dsonar.login=$SONAR_AUTH_TOKEN
+                        '''
                     }
                 }
             }
@@ -54,10 +63,10 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image
-                    sh 'docker build -t ${DOCKER_IMAGE} .'
+                    sh "docker build -t ${DOCKER_IMAGE} ."
                     // Push the Docker image to the registry
                     def dockerImage = docker.image("${DOCKER_IMAGE}")
-                    docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-cred') {
                         dockerImage.push()
                     }
                 }
@@ -73,8 +82,8 @@ pipeline {
                     withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                         // Configure Git user details and update the deployment file
                         sh '''
-                            git config user.email "vijayarajuyj1@gmail.com"
-                            git config user.name "${GIT_USER_NAME}"
+                            git config --global user.email "vijayarajuyj1@gmail.com"
+                            git config --global user.name "${GIT_USER_NAME}"
                             BUILD_NUMBER=${BUILD_NUMBER}
                             sed -i "s/{{ .Values.image.tag }}/${BUILD_NUMBER}/g" k8s/deployment.yml
                             git add k8s/deployment.yml
