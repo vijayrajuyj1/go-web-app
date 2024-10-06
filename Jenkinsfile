@@ -14,7 +14,7 @@ pipeline {
         sh 'ls -ltr'
         // build the project and create a JAR file
         sh 'sudo apt install golang-go'
-        sh 'go run buid -o main'
+        sh 'go build -o main'
       }
     }
     stage('Static Code Analysis') {
