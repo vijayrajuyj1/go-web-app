@@ -50,7 +50,7 @@ pipeline {
           sh '''
               git config user.email "vijayarajuyj1@gmail.com"
               git config user.name "vijayrajuyj1"
-               BUILD_NUMBER=${BUILD_NUMBER}
+              BUILD_NUMBER=${BUILD_NUMBER}
               # Update the image tag in values.yaml
               sed -i 's/tag: .*/tag/${{BUILD_NUMBER}}/' helm/helm1/values.yaml
               git add helm/helm1/values.yaml
