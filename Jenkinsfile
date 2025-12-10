@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout your Git repo
-                git branch: 'main', url: 'https://github.com/vijayarajuyj1/go-web-app.git'
+             //   git branch: 'main', url: 'https://github.com/vijayarajuyj1/go-web-app.git'
             }
         }
 
