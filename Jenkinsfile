@@ -1,8 +1,5 @@
 pipeline {
-  agent {
-    label 'node1-build'
-  }
-
+  agent any 
   stages {
     stage('Checkout') {
       steps {
@@ -46,7 +43,7 @@ pipeline {
         GIT_USER_NAME = "vijayrajuyj1"
       }
       steps {
-        withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+        withCredentials([string(credentialsId: 'github', variable: 'Github')]) {
           sh '''
               git config user.email "vijayarajuyj1@gmail.com"
               git config user.name "vijayrajuyj1"
