@@ -3,43 +3,33 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "vijayarajult2/go-web-app:${BUILD_NUMBER}"
-        GIT_REPO_NAME = "go-web-app"
-        GIT_USER_NAME = "vijayrajuyj1"
+    }
+
+    triggers {
+        githubPush() // Trigger on GitHub push
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Checkout your Git repo
-               //  git branch: 'main', url: 'https://github.com/vijayarajuyj1/go-web-app.git'
-                   echo "repo already checked"
+                checkout scm
             }
         }
 
-        stage('Build and Push Docker Image') {
+        stage('Build Docker Image') {
             steps {
                 script {
-                    // Build Docker image from your Dockerfile
-                    def dockerImage = docker.build("${DOCKER_IMAGE}")
-                    // Push Docker image to Docker Hub
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-cred') {
-                        dockerImage.push()
-                    }
+                    docker.build("${DOCKER_IMAGE}")
                 }
             }
         }
 
-        stage('Update values.yaml and Push') {
+        stage('Push Docker Image') {
             steps {
-                withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
-                    sh '''
-                        git config user.email "vijayarajuyj1@gmail.com"
-                        git config user.name "vijayarajuyj1"
-                        sed -i 's/tag: .*/tag: '"${BUILD_NUMBER}"'/g' helm/helm1/values.yaml
-                        git add helm/helm1/values.yaml
-                        git commit -m "Update image tag to ${BUILD_NUMBER}" || echo "No changes to commit"
-                        git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
-                    '''
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-cred') {
+                        docker.image("${DOCKER_IMAGE}").push()
+                    }
                 }
             }
         }
