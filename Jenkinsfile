@@ -31,14 +31,14 @@ pipeline {
 
         stage('Update values.yaml and Push') {
             steps {
-                withCredentials([string(credentialsId: 'github', variable: 'Github')]) {
+                withCredentials([string(credentialsId: 'Github', variable: 'Github')]) {
                     sh '''
                         git config user.email "vijayarajuyj1@gmail.com"
                         git config user.name "vijayarajuyj1"
                         sed -i 's/tag: .*/tag: '"${BUILD_NUMBER}"'/g' helm/helm1/values.yaml
                         git add helm/helm1/values.yaml
                         git commit -m "Update image tag to ${BUILD_NUMBER}" || echo "No changes to commit"
-                        git push https://${Githu}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                        git push https://${Github}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                     '''
                 }
             }
