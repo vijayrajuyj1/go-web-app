@@ -38,7 +38,7 @@ pipeline {
                         sed -i 's/tag: .*/tag: '"${BUILD_NUMBER}"'/g' helm/helm1/values.yaml
                         git add helm/helm1/values.yaml
                         git commit -m "Update image tag to ${BUILD_NUMBER}" || echo "No changes to commit"
-                        git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                        git push https://${Githu}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                     '''
                 }
             }
